@@ -1,10 +1,10 @@
 import { LogService, MatrixClient, MessageEvent, RichReply, UserID } from "matrix-bot-sdk";
 import { runHelloCommand } from "./hello";
 import * as htmlEscape from "escape-html";
+import { runHowDoICommand } from "./how-do-i";
 
-// The prefix required to trigger the bot. The bot will also respond
-// to being pinged directly.
-export const COMMAND_PREFIX = "!bot";
+// The prefix required to trigger the bot.
+export const COMMAND_PREFIX = "/bot";
 
 // This is where all of our commands will be handled
 export default class CommandHandler {
@@ -47,21 +47,27 @@ export default class CommandHandler {
 
         // Ensure that the event is a command before going on. We allow people to ping
         // the bot as well as using our COMMAND_PREFIX.
-        const prefixes = [COMMAND_PREFIX, `${this.localpart}:`, `${this.displayName}:`, `${this.userId}:`];
+        const prefixes = [COMMAND_PREFIX];
         const prefixUsed = prefixes.find(p => event.textBody.startsWith(p));
         if (!prefixUsed) return; // Not a command (as far as we're concerned)
 
         // Check to see what the arguments were to the command
-        const args = event.textBody.substring(prefixUsed.length).trim().split(' ');
+        const cmdNoPrefix = event.textBody.substring(prefixUsed.length).trim();
+        const args = cmdNoPrefix.split(' ');
+        const cmd = args[0].replace(/-/g, "", ).toLowerCase();
+        const cmdNoPrefix2 = cmdNoPrefix.substring(args[0].length).trim();
 
         // Try and figure out what command the user ran, defaulting to help
         try {
-            if (args[0] === "hello") {
+            if (cmd === "hello") {
                 return runHelloCommand(roomId, event, args, this.client);
+            } else if(cmd === "howdoi") {
+                return runHowDoICommand(roomId, event, cmdNoPrefix2, this.client);
             } else {
                 const help = "" +
-                    "!bot hello [user]     - Say hello to a user.\n" +
-                    "!bot help             - This menu\n";
+                    `${COMMAND_PREFIX} hello [user]     - Say hello to a user.\n` +
+                    `${COMMAND_PREFIX} how-do-i [thing] - Say hello to a user.\n` +
+                    `${COMMAND_PREFIX} help             - This menu\n`;
 
                 const text = `Help menu:\n${help}`;
                 const html = `<b>Help menu:</b><br /><pre><code>${htmlEscape(help)}</code></pre>`;
