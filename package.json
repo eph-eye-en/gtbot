@@ -1,22 +1,13 @@
 {
-  "name": "matrix-bot-sdk-bot-template",
+  "name": "matrix-gtbot",
   "version": "0.1.0",
-  "author": "TravisR",
+  "author": "eph-eye-en",
   "license": "Apache-2.0",
-  "description": "A template repository for bots made with the matrix-bot-sdk",
+  "description": "A simple Matrix bot for specific use cases",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/turt2live/matrix-bot-sdk-bot-template.git"
+    "url": "git+https://github.com/eph-eye-en/gtbot.git"
   },
-  "bugs": {
-    "url": "https://github.com/turt2live/matrix-bot-sdk-bot-template/issues"
-  },
-  "homepage": "https://github.com/turt2live/matrix-bot-sdk-bot-template#readme",
-  "keywords": [
-    "matrix",
-    "bot",
-    "template"
-  ],
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
