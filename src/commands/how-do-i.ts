@@ -18,8 +18,12 @@ async function fetchSubTasks(str: string): Promise<string[]> {
     return <string[]>await res.json();
 }
 
+function toSentenceCase(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export async function runHowDoICommand(roomId: string, event: MessageEvent<MessageEventContent>, argStr: string, client: MatrixClient) {
-    const task = argStr.replace(/[?!.,;‽]*$/, "");
+    const task = toSentenceCase(argStr.replace(/[?!.,;‽]*$/, ""));
     const steps = await fetchSubTasks(task);
 
     const lines = [task + ":", ...steps.map(htmlEscape)];
