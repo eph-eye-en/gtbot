@@ -19,9 +19,10 @@ async function fetchSubTasks(str: string): Promise<string[]> {
 }
 
 export async function runHowDoICommand(roomId: string, event: MessageEvent<MessageEventContent>, argStr: string, client: MatrixClient) {
-    const steps = await fetchSubTasks(argStr);
+    const task = argStr.replace(/[?!.,;‽]*$/, "");
+    const steps = await fetchSubTasks(task);
 
-    const lines = [argStr + ":", ...steps.map(htmlEscape)];
+    const lines = [task + ":", ...steps.map(htmlEscape)];
     const text = lines.join("\n- ");
     const html = lines.join("<br>- ");
 
